@@ -1,0 +1,37 @@
+<div class="table-container emp">
+	<div class="search">
+        <input #searchEmployee id="search-employee" />
+        <button (click)="search(searchEmployee.value)">Search</button> 
+    </div>
+    <table cellpadding="0px" cellspacing="0">
+        <tbody>
+            <tr>
+                <th style="width:20%">id</th>
+                <th style="width:30%">name</th>
+                <th style="width:30%">join date</th>
+                <th style="width:20%"></th>
+            </tr>
+            <tr *ngFor="let employee of employees; let i=even" [class.even]="i">
+            	<td>{{employee.id}}</td>
+                <td *ngIf="!employee.editable">{{employee.name}}</td>
+                <td *ngIf="employee.editable"><input [(ngModel)]="employee.name"></td>
+                <td *ngIf="!employee.editable">{{employee.joinDate}}</td>
+                <td *ngIf="employee.editable"><input [(ngModel)]="employee.joinDate"></td>
+                <td>
+                    <button *ngIf="!employee.editable" (click)="onEdit(employee)">edit</button>
+                    <button *ngIf="employee.editable" (click)="onSave(employee)">save</button>
+                    <button (click)="delete(employee)">delete</button>
+                </td>
+            </tr>
+            <tr *ngIf="addEmployee">
+            	<td></td>
+            	<td><input #employeeName (keyup)="0"></td>
+                <td><input #employeeDate (keyup)="0"></td>
+                <button *ngIf="addEmployee" class="long" (click)="create(employeeName.value,employeeDate.value)">Save Add</button>
+            </tr>
+        </tbody>
+    </table>
+    <div class="footer">
+    	<button *ngIf="!addEmployee" class="long" (click)="add()">Add</button>
+    </div>
+</div>
