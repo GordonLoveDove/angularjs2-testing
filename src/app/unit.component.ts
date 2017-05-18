@@ -1,9 +1,12 @@
 import { Component, OnInit }   from '@angular/core';
-import { Router }              from '@angular/router';
+import { Router,ActivatedRoute, Params }            from '@angular/router';
+
+import 'rxjs/add/operator/switchMap';
 
 import { Unit }                from './unit';
 import { UnitService }         from './unit.service';
 import { UnitSearchService }   from './unit-search.service';
+import { Remember }     		   from './remember.service';
 
 @Component({
   selector: 'unit',
@@ -14,11 +17,13 @@ export class UnitComponent implements OnInit {
   units: Unit[];
   selectedUnit: Unit;
   addUnit: boolean = false;
+  unitName:string;
 
   constructor(
     private unitService: UnitService,
 	private unitSearchService: UnitSearchService,
-    private router: Router) { }
+    private route: ActivatedRoute,
+	private remember: Remember) { }
 
   getUnits(): void {
     this.unitService
@@ -71,9 +76,19 @@ export class UnitComponent implements OnInit {
 		.then(unit => {
         this.units=unit;
       });
+	this.remember.searchUnit(term);
   }
 
   ngOnInit(): void {
-    this.getUnits();
+    const id = this.route.params.map(p => p.id)
+	.subscribe(id => {
+		if(id === '0'||!id){id=''}
+		this.unitName = id;
+		this.unitSearchService.search(id)
+		.toPromise()
+		.then(unit => {
+        this.units=unit;
+      });
+	})
   }
 }

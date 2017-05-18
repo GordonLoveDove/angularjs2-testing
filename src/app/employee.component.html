@@ -1,6 +1,6 @@
 <div class="table-container emp">
 	<div class="search">
-        <input #searchEmployee id="search-employee" />
+        <input #searchEmployee [(ngModel)]="employeeName" id="search-employee" />
         <button (click)="search(searchEmployee.value)">Search</button> 
     </div>
     <table cellpadding="0px" cellspacing="0">

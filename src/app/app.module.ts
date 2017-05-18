@@ -13,6 +13,7 @@ import { EmployeeComponent } from './employee.component';
 import { UnitComponent } from './unit.component';
 import { EmployeeService } from './employee.service';
 import { UnitService } from './unit.service';
+import { Remember } from './remember.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UnitService } from './unit.service';
   ],
   providers: [
   	EmployeeService,
-	UnitService
+	UnitService,
+	Remember
   ],
   bootstrap: [AppComponent]
 })

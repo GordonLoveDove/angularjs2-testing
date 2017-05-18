@@ -1,6 +1,6 @@
 <div class="table-container">
 	<div class="search">
-    	<input #searchUnit id="search-unit" />
+    	<input #searchUnit [(ngModel)]="unitName" id="search-unit" />
         <button (click)="search(searchUnit.value)">Search</button> 
     </div>
     <table cellpadding="0px" cellspacing="0">

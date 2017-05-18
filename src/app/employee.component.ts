@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
+import { ActivatedRoute, Params }            from '@angular/router';
+
+import 'rxjs/add/operator/map';
 
 import { Employee }                from './employee';
 import { EmployeeService }         from './employee.service';
 import { EmployeeSearchService }   from './employee-search.service';
+import { Remember }     		   from './remember.service';
 
 @Component({
   selector: 'employee',
@@ -14,11 +17,13 @@ export class EmployeeComponent implements OnInit {
   employees: Employee[];
   selectedEmployee: Employee;
   addEmployee: boolean = false;
+  employeeName:string;
 
   constructor(
     private employeeService: EmployeeService,
 	private employeeSearchService: EmployeeSearchService,
-    private router: Router) { }
+	private route: ActivatedRoute,
+	private remember: Remember) { }
 
   getEmployees(): void {
     this.employeeService
@@ -71,10 +76,26 @@ export class EmployeeComponent implements OnInit {
 		.then(employee => {
         this.employees=employee;
       });
+	this.remember.searchEmp(term);
   }
 
   ngOnInit(): void {
-    this.getEmployees();
+    /*this.route.params
+    .switchMap((params: Params) => this.employeeSearchService.search(this.employeeName = params['id']))
+    .subscribe(employee => {
+		console.log(employee);
+        this.employees=employee;});*/
+	//console.log(this.route.snapshot.queryParams);
+	const id = this.route.queryParams.map((params: Params) => params['id'])
+	.subscribe(id => {
+		console.log(id);
+		if(id === '0'||!id){id=''}
+		this.employeeName = id;
+		this.employeeSearchService.search(id)
+		.toPromise()
+		.then(employee => {
+        this.employees=employee;
+      });
+	})
   }
-
 }
